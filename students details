@@ -1,0 +1,80 @@
+pragma solidity ^0.5.1; 
+
+contract studentDetails{
+
+struct student { 
+     
+    	string sname;
+    	string degree;
+    	uint year;
+    	uint roll;
+    	address accountaddress;
+    	string gmailid;
+	}
+    address owner;  
+
+ mapping (address => student) students ; 
+    address[]  studentAccts; 
+    
+    constructor () public { 
+        owner = msg.sender;  
+    
+}
+ modifier ifOwner() {    
+
+    	require (owner == msg.sender);
+        	_;
+    	}
+
+
+
+
+
+function insertDetails(address _address,string memory _sname,string memory _degree,uint _year,uint _roll , string memory _gmailid)  public ifOwner {
+            
+    	students[_address].accountaddress = _address;
+    	students[_address].sname = _sname;
+    	students[_address].degree = _degree;
+    	students[_address].year = _year;
+    	students[_address].roll = _roll;
+    	students[_address].gmailid = _gmailid;
+    	studentAccts.push(_address) +1;
+	}
+
+
+
+	function updatedetails(address _address,string memory _sname, string memory _degree)  public ifOwner{
+                
+     	students[_address].sname = _sname;
+     	students[_address].degree = _degree;
+
+	}
+
+
+     function getStudentDetails(address _address) view public returns(string memory,string memory,uint,uint, string memory){
+        
+    
+    	return (students[_address].sname,students[_address].degree,
+    	students[_address].year,students[_address].roll ,students[_address].gmailid);
+         
+     }
+
+    function getstudentss() view public returns(address[] memory) {
+       
+    
+    	return studentAccts;  
+    }
+    function countstudentss() view public returns (uint) {
+       
+    	return studentAccts.length;
+    }
+	
+	function validateStudent(address valAddress) view public returns(bool){
+    	if ((students[valAddress].accountaddress==valAddress)){
+        	return true;
+    	}
+    	else {
+        	return false;
+    	}
+	}   
+}
